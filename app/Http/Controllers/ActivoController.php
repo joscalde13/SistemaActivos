@@ -135,7 +135,7 @@ class ActivoController extends Controller
     
     $activo->update(['estado' => 'baja']);
 
-    return redirect()->route('activos.index')->with('success', 'Activo dado de baja.');
+    return redirect()->route('activos.index')->with( 'Activo dado de baja.');
 }
 
 }
