@@ -23,13 +23,6 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        User::updateOrCreate(
-            ['email' => 'admin@mayda.com'],
-            [
-                'name' => 'Admin TI',
-                'password' => Hash::make('password123'), 
-                'role' => 'admin',
-            ]
-        );
+        
     }
 }
