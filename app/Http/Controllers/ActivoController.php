@@ -6,6 +6,7 @@ use App\Models\Activo;
 use App\Models\Movimiento;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActivoController extends Controller
 {
@@ -45,9 +46,10 @@ class ActivoController extends Controller
 
         $activo = Activo::create($request->all());
         Movimiento::create([
-            'activo_id' => $activo->id,
-            'accion' => 'Alta',
-            'detalle' => 'Registro inicial del activo'
+            'activo_id'     => $activo->id,
+            'user_id'       => Auth::id(),
+            'accion'        => 'Alta',
+            'detalle'       => 'Registro inicial del activo'
         ]);
         return redirect()->route('activos.index')->with('success', 'Activo creado.');
     }
@@ -65,12 +67,15 @@ class ActivoController extends Controller
         $activo = Activo::findOrFail($id);
 
         $activo->update(['user_id' => $request->user_id, 'estado' => 'asignado']);
+        $usuarioDestino = User::find($request->user_id);
 
         Movimiento::create([
-            'activo_id' => $activo->id,
-            'user_id' => $request->user_id,
-            'accion' => 'Asignación',
-            'detalle' => 'Activo asignado a usuario'
+            'activo_id'     => $activo->id,
+            'user_id'       => Auth::id(),
+            'accion'        => 'Asignación',
+            'detalle'       => $usuarioDestino
+                ? 'Activo asignado al usuario '.$usuarioDestino->name
+                : 'Activo asignado a usuario'
         ]);
         
         return redirect()->route('activos.index')->with('success', 'Activo creado.');
@@ -108,10 +113,10 @@ class ActivoController extends Controller
         $activo->update($request->all());
 
         Movimiento::create([
-            'activo_id' => $activo->id,
-            'user_id'   => $activo->user_id,
-            'accion'    => 'Actualización',
-            'detalle'   => 'Actualización de datos o estado del activo'
+            'activo_id'     => $activo->id,
+            'user_id'       => Auth::id(),
+            'accion'        => 'Actualización',
+            'detalle'       => 'Actualización de datos o estado del activo'
         ]);
 
         return redirect()->route('activos.index')->with('success', 'Activo actualizado correctamente.');
@@ -126,10 +131,10 @@ class ActivoController extends Controller
 
     // registra el movimiento
     Movimiento::create([
-        'activo_id' => $activo->id,
-        'user_id'   => $activo->user_id,
-        'accion'    => 'Baja',
-        'detalle'   => 'Activo dado de baja',
+        'activo_id'     => $activo->id,
+        'user_id'       => Auth::id(),
+        'accion'        => 'Baja',
+        'detalle'       => 'Activo dado de baja',
     ]);
 
     

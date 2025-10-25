@@ -10,7 +10,7 @@
                 <tr>
                     <th class="px-4 py-2 text-left">Fecha</th>
                     <th class="px-4 py-2 text-left">Activo</th>
-                    <th class="px-4 py-2 text-left">Usuario</th>
+                    <th class="px-4 py-2 text-left">Realizado por</th>
                     <th class="px-4 py-2 text-left">Acción</th>
                     <th class="px-4 py-2 text-left">Detalle</th>
                 </tr>
@@ -23,7 +23,12 @@
                             <div class="font-mono">{{ $m->activo?->codigo }}</div>
                             <div class="text-xs text-gray-500 dark:text-gray-400">{{ $m->activo?->descripcion }}</div>
                         </td>
-                        <td class="px-4 py-2">{{ $m->user?->name ?? '—' }}</td>
+                        <td class="px-4 py-2">
+                            <div>Movimiento hecho por: {{ $m->user?->name ?? '—' }}</div>
+                            @if($m->user?->email)
+                                <div class="text-xs text-gray-500 dark:text-gray-400">{{ $m->user->email }}</div>
+                            @endif
+                        </td>
                         <td class="px-4 py-2">{{ $m->accion }}</td>
                         <td class="px-4 py-2">{{ $m->detalle }}</td>
                     </tr>

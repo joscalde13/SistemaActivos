@@ -12,7 +12,6 @@ class MovimientoController extends \Illuminate\Routing\Controller
 {
     public function index(Request $request)
     {
-        // Filtros opcionales: q (texto), accion, desde, hasta, activo_id, user_id
         $query = Movimiento::with(['activo','user'])->latest();
 
         if ($request->filled('accion')) {
@@ -46,7 +45,7 @@ class MovimientoController extends \Illuminate\Routing\Controller
 
         $movimientos = $query->paginate(15)->withQueryString();
 
-        // Para llenar selects (opcional)
+        // Para llenar selects
         $acciones = ['Alta','Asignación','Reasignación','Actualización','Robo','Baja'];
         $activos  = Activo::orderBy('codigo')->get(['id','codigo']);
         $usuarios = User::orderBy('name')->get(['id','name']);
