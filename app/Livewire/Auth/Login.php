@@ -18,7 +18,8 @@ class Login extends Component
     #[Validate('required|string|email')]
     public string $email = '';
 
-    #[Validate('required|string')]
+   #[Validate('required|string|regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/')]
+
     public string $password = '';
 
     public bool $remember = false;
