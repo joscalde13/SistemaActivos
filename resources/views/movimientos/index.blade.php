@@ -24,7 +24,7 @@
                             <div class="text-xs text-gray-500 dark:text-gray-400">{{ $m->activo?->descripcion }}</div>
                         </td>
                         <td class="px-4 py-2">
-                            <div>Movimiento hecho por: {{ $m->user?->name ?? '—' }}</div>
+                            <div> {{ $m->user?->name ?? '—' }}</div>
                             @if($m->user?->email)
                                 <div class="text-xs text-gray-500 dark:text-gray-400">{{ $m->user->email }}</div>
                             @endif
