@@ -27,11 +27,21 @@ class Register extends Component
      */
     public function register(): void
     {
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)->letters()->numbers()->symbols()],
-        ]);
+        $validated = $this->validate(
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)->letters()->numbers()->symbols()],
+            ],
+            [
+                'password.required' => 'La contraseña es obligatoria.',
+                'password.confirmed' => 'Las contraseñas no coinciden.',
+                'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+                'password.letters' => 'La contraseña debe contener al menos una letra.',
+                'password.numbers' => 'La contraseña debe contener al menos un número.',
+                'password.symbols' => 'La contraseña debe contener al menos un símbolo.',
+            ]
+        );
 
         $validated['password'] = Hash::make($validated['password']);
 
@@ -43,7 +53,7 @@ class Register extends Component
     }
 
     #[Computed]
-    
+
     public function passwordChecklist(): array
     {
         $password = $this->password ?? '';
