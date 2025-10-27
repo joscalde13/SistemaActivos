@@ -28,7 +28,7 @@
 
         <!-- Password -->
         <flux:input
-            wire:model="password"
+            wire:model.live="password"
             :label="__('Contraseña')"
             type="password"
             required
@@ -36,6 +36,17 @@
             :placeholder="__('Contraseña')"
             viewable
         />
+
+        <div class="rounded-md border border-zinc-200 px-3 py-2 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">
+            <p class="font-medium text-zinc-700 dark:text-zinc-200">La contraseña debe incluir:</p>
+            <ul class="mt-2 space-y-1">
+                @foreach ($this->passwordChecklist as $item)
+                    <li class="{{ $item['met'] ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400' }}">
+                        {{ $item['label'] }} 
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
         <!-- Confirm Password -->
         <flux:input

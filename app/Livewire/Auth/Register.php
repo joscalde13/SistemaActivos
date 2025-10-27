@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
@@ -29,7 +30,7 @@ class Register extends Component
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::min(8)->letters()->numbers()->symbols()],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -39,5 +40,31 @@ class Register extends Component
         Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
+    }
+
+    #[Computed]
+    
+    public function passwordChecklist(): array
+    {
+        $password = $this->password ?? '';
+
+        return [
+            [
+                'label' => 'Al menos una letra (mayúscula o minúscula)',
+                'met' => (bool) preg_match('/[A-Za-z]/', $password),
+            ],
+            [
+                'label' => 'Al menos un número',
+                'met' => (bool) preg_match('/\d/', $password),
+            ],
+            [
+                'label' => 'Al menos un carácter especial (como @, $, !, %, *, ?, &)',
+                'met' => (bool) preg_match('/[^A-Za-z0-9]/', $password),
+            ],
+            [
+                'label' => 'Una longitud mínima de 8 caracteres',
+                'met' => strlen($password) >= 8,
+            ],
+        ];
     }
 }
